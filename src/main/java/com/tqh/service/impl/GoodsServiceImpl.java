@@ -7,13 +7,17 @@ import com.tqh.mapper.GoodsMapper;
 import com.tqh.model.GoodIDAndStock;
 import com.tqh.model.Goods;
 import com.tqh.model.MiaoshaGoodsVo;
+import com.tqh.model.Order;
 import com.tqh.service.GoodsService;
+import com.tqh.service.OrderService;
 import com.tqh.util.JsonTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +36,11 @@ import java.util.Map;
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
     GoodsMapper goodsMapper;
+
+    @Autowired
+    @Lazy
+    OrderServiceImpl orderService;
+
     @Autowired
     StringRedisTemplate stringRedisTemplate;
     @Override
@@ -76,5 +85,25 @@ public class GoodsServiceImpl implements GoodsService {
         for(GoodIDAndStock goodIDAndStock:list){
             stringRedisTemplate.opsForValue().set(goodIDAndStock.getId()+"stock",String.valueOf(goodIDAndStock.getStock()));
         }
+    }
+
+    @Async("taskExecutor")
+    public void doTaskOne() {
+        System.out.println("开始做任务一");
+        long start = System.currentTimeMillis();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("完成任务一，耗时：" + (end - start) + "毫秒");
+    }
+
+    @Async("taskExecutor")
+    public void doTaskTwo(String order_id) {
+        Order order=orderService.getOrderById(order_id);
+        decreaseStock(order.getGoods_id());
+        System.out.println("消费完毕,mysql库存已扣减");
     }
 }

@@ -5,6 +5,9 @@ import com.tqh.model.Result;
 import com.tqh.service.MQSender;
 import com.tqh.service.impl.UserServiceImpl;
 import com.tqh.util.AccessLimit;
+import com.tqh.util.SnowFlake;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
@@ -27,6 +30,7 @@ import java.util.List;
  * @Author Mcorleon
  * @Date 2019/2/20 15:07
  */
+@Api(tags = "主页面模块")
 @Controller
 public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
@@ -39,6 +43,7 @@ public class MainController {
     MQSender sender;
 
     @PostMapping("/login")
+    @ApiOperation(value = "登录验证", notes = "使用shiro进行验证,登陆成功后redis缓存用户")
     @ResponseBody
     public Result Login(String uid, String psw, HttpServletRequest request) {
         String loginName = uid;
@@ -47,53 +52,48 @@ public class MainController {
 
     }
 
-    @RequestMapping("/goods")
+    @GetMapping("/goods")
+    @ApiOperation(value = "进入商品列表页")
     public String goods() {
         return "goods_list";
     }
 
-    @RequestMapping("/miaoshaGoods")
+    @GetMapping("/miaoshaGoods")
+    @ApiOperation(value = "进入秒杀商品详情页")
     public String miaoshaGoods() {
         return "miaoshaGoods";
     }
 
     @GetMapping("/login")
+    @ApiOperation(value = "进入登录页面")
     public String login() {
         return "login";
     }
 
-    @RequestMapping("/403")
+    @GetMapping("/403")
+    @ApiOperation(value = "无权限访问提示页")
     public String notAuthenticated() {
         return "403";
     }
 
-    @RequestMapping("/checkOrder")
+    @GetMapping("/checkOrder")
+    @ApiOperation(value = "进入确认订单页面")
 //    @RequiresRoles("vip")
     public String checkOrder() {
         return "checkOrder";
     }
 
-    @RequestMapping("/order_list")
+    @GetMapping("/order_list")
+    @ApiOperation(value = "进入用户订单列表页")
     public String order_list() {
         return "order_list";
     }
 
-    @RequestMapping("/Err")
+    @GetMapping("/Err")
+    @ApiOperation(value = "操作失败提示页")
     public String Err() {
         return "error";
     }
 
-    @RequestMapping("/upload")
-    public void upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(4 * 1024);
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        List<FileItem> fileItems;
 
-        fileItems = upload.parseRequest(new ServletRequestContext(request));
-        //获取文件域
-        FileItem fileItem = fileItems.get(0);
-
-
-    }
 }

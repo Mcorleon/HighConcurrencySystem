@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     UserServiceImpl userService;
+
     @Autowired
     GoodsServiceImpl goodsService;
     @Autowired
@@ -56,7 +58,10 @@ public class OrderServiceImpl implements OrderService {
             if (200==result.getCode() ) {
                 //订单生成成功(未支付)
                 //交给队列 异步减mysql库存或者发回扣等等...(严格来说应该在支付后进行,此处省略)
-                sender.sendOrderMessage(result.getDetail());
+//                sender.sendOrderMessage(result.getDetail());
+                goodsService.doTaskOne();
+                goodsService.doTaskTwo(result.getDetail());
+
             }else {
                 //生成订单失败,把减掉的redis库存加回去
                 stringRedisTemplate.opsForValue().increment(miaosha_id + "stock",goods_num);
@@ -165,4 +170,6 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(String order_id) {
         return orderMapper.getOrderById(order_id);
     }
+
+
 }

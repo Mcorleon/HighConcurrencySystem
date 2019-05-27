@@ -1,12 +1,8 @@
 package com.tqh.util;
 
 import com.tqh.model.Result;
-import com.tqh.util.AccessLimit;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,7 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-public class AccessLimitInterceptor implements HandlerInterceptor {
+public class    AccessLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -39,7 +35,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             }
             int limit = accessLimit.limit();
             int sec = accessLimit.sec();
-            String key = request.getLocalAddr() + request.getRequestURI();
+            String key =  request.getRequestURI();
             if (!redisTemplate.hasKey(key)) {
                 //set时一定要加过期时间
                 redisTemplate.opsForValue().set(key, 1, sec, TimeUnit.SECONDS);

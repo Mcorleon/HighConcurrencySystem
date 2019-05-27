@@ -36,7 +36,7 @@ public class RedisTool {
         sb.append("    if (stock-ARGV[1] >= 0) then");
         sb.append("        redis.call('incrby', KEYS[1], -ARGV[1]);");
         sb.append("    end;");
-        sb.append("        return stock;");
+        sb.append("    return stock;");
         sb.append("end;");
         sb.append("return -1;");
         STOCK_LUA = sb.toString();

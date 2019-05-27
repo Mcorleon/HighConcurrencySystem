@@ -31,6 +31,7 @@ $(function () {
         form.render();
         table.render({
             elem: '#tb',
+            method: 'post',
             url: '/goods/getMiaoshaGoodsList/' + goods_id,
             limits: [5, 10],
             parseData: function (res) { //res 即为原始返回的数据

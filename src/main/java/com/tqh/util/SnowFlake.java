@@ -3,6 +3,7 @@ package com.tqh.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -10,6 +11,7 @@ import javax.annotation.Resource;
  * @Author Mcorleon
  * @Date 2019/2/21 19:15
  */
+
  public class SnowFlake {
     // 起始的时间戳
     private final static long START_STMP = 1480166465631L;
@@ -29,6 +31,7 @@ import javax.annotation.Resource;
     private long machineId; // 机器标识
     private long sequence = 0L; // 序列号
     private long lastStmp = -1L;// 上一次时间戳
+
 
 
     public SnowFlake(long datacenterId, long machineId) {

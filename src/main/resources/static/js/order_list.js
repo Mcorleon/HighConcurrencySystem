@@ -35,6 +35,7 @@ $(function () {
         table.render({
             elem: '#tb',
             url: '/order/getOrderVoByUid',
+            method:'post',
             limits: [5, 10],
             where: {uid:uid},
             parseData: function (res) { //res 即为原始返回的数据
