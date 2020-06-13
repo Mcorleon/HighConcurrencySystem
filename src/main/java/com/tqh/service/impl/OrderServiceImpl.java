@@ -58,9 +58,9 @@ public class OrderServiceImpl implements OrderService {
             if (200==result.getCode() ) {
                 //订单生成成功(未支付)
                 //交给队列 异步减mysql库存或者发回扣等等...(严格来说应该在支付后进行,此处省略)
-//                sender.sendOrderMessage(result.getDetail());
-                goodsService.doTaskOne();
-                goodsService.doTaskTwo(result.getDetail());
+                sender.sendOrderMessage(result.getDetail());
+//                goodsService.doTaskOne();
+//                goodsService.doTaskTwo(result.getDetail());
 
             }else {
                 //生成订单失败,把减掉的redis库存加回去

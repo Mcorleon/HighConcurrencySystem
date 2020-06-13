@@ -8,6 +8,7 @@ $(function () {
         type: "get",
         url: "/user/getCurrentUser",
         data: {},
+        async:false,
         dataType: "json",
         success: function (data) {
 

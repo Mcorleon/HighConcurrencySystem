@@ -79,7 +79,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/dists/img/*", "anon");
         //表示需要认证才可以访问,测试接口时记得关掉
-//        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
